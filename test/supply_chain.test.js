@@ -59,7 +59,7 @@ contract('SupplyChain', function(accounts) {
         const result = await supplyChain.fetchItem.call(sku)
 
         assert.equal(result[3].toString(10), 1, 'the state of the item should be "Sold", which should be declared second in the State Enum')
-        assert.equal(result[5], bob, 'the buyer address should be set bob when he purchases an item')
+        assert.equal(result[5], bob, 'the buyer address should be set to bob when he purchases an item')
         assert.equal(eventEmitted, true, 'adding an item should emit a Sold event')
         assert.equal(aliceBalanceAfter, aliceBalanceBefore + parseInt(price, 10), "alice's balance should be increased by the price of the item")
         assert.isBelow(bobBalanceAfter, bobBalanceBefore - price, "bob's balance should be reduced by more than the price of the item (including gas costs)")
