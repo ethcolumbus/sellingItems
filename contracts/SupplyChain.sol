@@ -38,16 +38,18 @@ contract SupplyChain {
 
   /* Create 4 events with the same name as each possible State (see above)
     Each event should accept one argument, the sku*/
+  event InBuyItem(uint sku);
   event ForSale(uint sku);
   event Sold(uint sku);
   event Shipped(uint sku);
   event Received(uint sku);
+  event InPaidEnough();
 
 /* Create a modifer that checks if the msg.sender is the owner of the contract */
   modifier isOwner () { require (msg.sender == owner); _;}
 
   modifier verifyCaller (address _address) { require (msg.sender == _address); _;}
-  modifier paidEnough(uint _price) { require(msg.value >= _price); _;}
+  modifier paidEnough(uint _price) { emit InPaidEnough(); require(msg.value >= _price); _;}
   modifier checkValue(uint _sku) {
     //refund them after pay for item (why it is before, _ checks for logic before func)
     _;
@@ -91,6 +93,7 @@ contract SupplyChain {
     paidEnough(items[_sku].price)
     checkValue(_sku)
   {
+      emit InBuyItem(_sku);
       items[_sku].seller.transfer(items[_sku].price);
       items[_sku].buyer = msg.sender;
       items[_sku].state = State.Sold;
